@@ -12,6 +12,7 @@ import org.hibernate.annotations.DynamicUpdate;
 @DynamicInsert
 @DynamicUpdate
 public class UserEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
