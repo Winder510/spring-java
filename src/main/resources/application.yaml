@@ -19,11 +19,3 @@ spring:
 server:
   port: 8000
 
-# Cấu hình logging cho Hibernate
-logging:
-  level:
-    org:
-      hibernate:
-        SQL: DEBUG  # Hiển thị câu lệnh SQL
-        orm.jdbc.bind: TRACE  # Hiển thị tham số được truyền vào câu lệnh SQL
-
