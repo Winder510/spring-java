@@ -23,6 +23,9 @@ public class UserEntity {
     @Column(columnDefinition = "varchar(255) comment 'user name'", nullable = false)
     private String userName;
 
+    @Column(columnDefinition = "varchar(255) comment 'user name'", nullable = false)
+    private String userPassword;
+
     @Column(columnDefinition = "varchar(255) comment 'user email'", nullable = false,unique = true)
     private String userEmail;
 

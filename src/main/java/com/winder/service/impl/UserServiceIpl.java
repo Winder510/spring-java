@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserServiceIpl implements UserService {
@@ -40,5 +41,10 @@ public class UserServiceIpl implements UserService {
     @Override
     public Page<UserEntity> findByUserNameContaining(String userName, Pageable pageable) {
         return userRepository.findByUserNameContaining(userName,pageable);
+    }
+
+    @Override
+    public UserEntity getUser(Long id) {
+       return userRepository.findById(id).orElseThrow(()-> new RuntimeException("User not found"));
     }
 }

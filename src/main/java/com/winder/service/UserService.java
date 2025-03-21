@@ -1,11 +1,11 @@
 package com.winder.service;
 
 import com.winder.entity.user.UserEntity;
-import org.apache.catalina.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UserService {
     UserEntity createUser(UserEntity user);
@@ -17,4 +17,5 @@ public interface UserService {
 
     //get search by limit offset
     Page<UserEntity> findByUserNameContaining(String userName, Pageable pageable);
+    UserEntity getUser(Long id);
 }

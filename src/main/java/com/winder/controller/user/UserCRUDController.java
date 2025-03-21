@@ -21,6 +21,11 @@ public class UserCRUDController {
         return userService.createUser(userEntity);
     }
 
+    @GetMapping()
+    public UserEntity getUser(@RequestParam Long id){
+        return userService.getUser(id);
+    }
+
     @GetMapping("/search")
     public UserEntity searchUser(@RequestParam String userName,@RequestParam String userEmail){
         return userService.findByUserNameAndUserEmail(userName,userEmail);
@@ -52,4 +57,6 @@ public class UserCRUDController {
         Pageable pageable = PageRequest.of(page,size,sortBy);
         return userService.findByUserNameContaining(userName,pageable);
     }
+
+
 }
