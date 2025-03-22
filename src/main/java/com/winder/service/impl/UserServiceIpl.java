@@ -1,5 +1,6 @@
 package com.winder.service.impl;
 
+import com.winder.dto.request.user.UserCreationRequest;
 import com.winder.entity.user.UserEntity;
 import com.winder.repository.UserRepository;
 import com.winder.service.UserService;
@@ -18,7 +19,15 @@ public class UserServiceIpl implements UserService {
     private UserRepository userRepository;
 
     @Override
-    public UserEntity createUser(UserEntity user) {
+    public UserEntity createUser(UserCreationRequest req) {
+        Boolean existed = userRepository.existsByUserEmail(req.getUserEmail());
+        if(existed)  throw new RuntimeException("Email has been existed");
+
+        UserEntity user = new UserEntity();
+        user.setUserName(req.getUserName());
+        user.setUserPassword(req.getUserPassword());
+        user.setUserEmail(req.getUserEmail());
+
         return userRepository.save(user);
     }
 
@@ -47,4 +56,6 @@ public class UserServiceIpl implements UserService {
     public UserEntity getUser(Long id) {
        return userRepository.findById(id).orElseThrow(()-> new RuntimeException("User not found"));
     }
+
+
 }
