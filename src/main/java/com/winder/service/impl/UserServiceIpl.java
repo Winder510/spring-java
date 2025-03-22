@@ -2,6 +2,7 @@ package com.winder.service.impl;
 
 import com.winder.dto.request.user.UserCreationRequest;
 import com.winder.entity.user.UserEntity;
+import com.winder.mapper.UserMapper;
 import com.winder.repository.UserRepository;
 import com.winder.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,15 +19,20 @@ public class UserServiceIpl implements UserService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    UserMapper userMapper;
+
     @Override
     public UserEntity createUser(UserCreationRequest req) {
         Boolean existed = userRepository.existsByUserEmail(req.getUserEmail());
         if(existed)  throw new RuntimeException("Email has been existed");
 
-        UserEntity user = new UserEntity();
-        user.setUserName(req.getUserName());
-        user.setUserPassword(req.getUserPassword());
-        user.setUserEmail(req.getUserEmail());
+        UserEntity user = userMapper.toUser(req);
+
+//        UserEntity user = new UserEntity();
+//        user.setUserName(req.getUserName());
+//        user.setUserPassword(req.getUserPassword());
+//        user.setUserEmail(req.getUserEmail());
 
         return userRepository.save(user);
     }

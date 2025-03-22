@@ -5,6 +5,9 @@ import com.winder.dto.response.SuccessResponse;
 import com.winder.entity.user.UserEntity;
 import com.winder.service.UserService;
 import jakarta.validation.Valid;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -15,10 +18,11 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/v1/api/user")
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE,makeFinal = true)
 public class UserCRUDController {
 
-    @Autowired
-    private UserService userService;
+     UserService userService;
 
     @PostMapping("/add")
     public ResponseEntity<SuccessResponse> addUser(@RequestBody @Valid UserCreationRequest userCreationRequest){
