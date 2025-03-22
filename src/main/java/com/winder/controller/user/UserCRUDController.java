@@ -1,19 +1,17 @@
 package com.winder.controller.user;
 
 import com.winder.dto.request.user.UserCreationRequest;
-import com.winder.dto.response.SuccessResponse;
+import com.winder.dto.response.ApiResponse;
 import com.winder.entity.user.UserEntity;
 import com.winder.service.UserService;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -25,8 +23,11 @@ public class UserCRUDController {
      UserService userService;
 
     @PostMapping("/add")
-    public ResponseEntity<SuccessResponse> addUser(@RequestBody @Valid UserCreationRequest userCreationRequest){
-        return ResponseEntity.ok( new SuccessResponse("Create user success",userService.createUser(userCreationRequest)));
+    public ApiResponse<UserEntity> addUser(@RequestBody @Valid UserCreationRequest userCreationRequest){
+        ApiResponse<UserEntity> apiResponse = new ApiResponse<>();
+        apiResponse.setResult(userService.createUser(userCreationRequest));
+
+        return apiResponse;
     }
 
     @GetMapping()

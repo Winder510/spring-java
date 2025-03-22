@@ -1,29 +1,25 @@
 package com.winder.repository;
 
 import com.winder.entity.user.UserEntity;
-import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 //@RepositoryDefinition(domainClass = UserEntity.class, idClass = Long.class)
 //@Repository
 public interface UserRepository extends JpaRepository<UserEntity,Long>, JpaSpecificationExecutor<UserEntity> {
 
     // use pageable
-    Page<UserEntity> findByUserName(String userName, Pageable pageable);
+//  Page<UserEntity> findByUserName(String userName);
     Page<UserEntity> findByUserNameContaining(String userName, Pageable pageable);
     Boolean existsByUserEmail(String userEmail);
     UserEntity findByUserNameAndUserEmail(String userName,String userEmail);
     UserEntity findByUserNameAndUserPassword(String userName,String userPassord);
-  //  UserEntity findByUserName(String userName);
+    Optional<UserEntity> findByUserName(String userName);
 
     /**
      * where username like %?

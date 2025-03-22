@@ -1,46 +1,53 @@
 package com.winder.base;
 
-import com.winder.dto.response.ErrorResponse;
+import com.winder.dto.response.ApiResponse;
+import com.winder.enums.ErrorCode;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
+    @ExceptionHandler(value = Exception.class)
+    ResponseEntity<ApiResponse> handlingRuntimeException(RuntimeException exception){
+        ApiResponse apiResponse = new ApiResponse();
 
-    @ExceptionHandler(RuntimeException.class)
-    ResponseEntity<Object> handleRuntimeException(RuntimeException runtimeException) {
-        return buildResponseEntity(HttpStatus.BAD_REQUEST, runtimeException.getMessage());
+        apiResponse.setCode(ErrorCode.UNCATEGORIZED_EXCEPTION.getCode());
+        apiResponse.setMessage(ErrorCode.UNCATEGORIZED_EXCEPTION.getMessage());
+
+        return ResponseEntity.badRequest().body(apiResponse);
     }
 
-    @ExceptionHandler(IllegalArgumentException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<Object> handleIllegalArgumentException(IllegalArgumentException ex) {
-        return buildResponseEntity(HttpStatus.BAD_REQUEST, ex.getMessage());
+    @ExceptionHandler(value = AppException.class)
+    ResponseEntity<ApiResponse> handlingAppException(AppException exception){
+        ErrorCode errorCode = exception.getErrorCode();
+        ApiResponse apiResponse = new ApiResponse();
+
+        apiResponse.setCode(errorCode.getCode());
+        apiResponse.setMessage(errorCode.getMessage());
+
+        return ResponseEntity.badRequest().body(apiResponse);
     }
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<Object> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
-        return buildResponseEntity(HttpStatus.BAD_REQUEST, ex.getFieldError().getDefaultMessage());
-    }
-    @ExceptionHandler(Exception.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<Object> handleException(Exception ex) {
-        return buildResponseEntity(HttpStatus.BAD_REQUEST, ex.getMessage());
+    @ExceptionHandler(value = MethodArgumentNotValidException.class)
+    ResponseEntity<ApiResponse> handlingValidation(MethodArgumentNotValidException exception){
+        String enumKey = exception.getFieldError().getDefaultMessage();
 
+        ErrorCode errorCode = ErrorCode.INVALID_KEY;
 
-    }
+        try {
+            errorCode = ErrorCode.valueOf(enumKey);
+        } catch (IllegalArgumentException e){
 
-    private ResponseEntity<Object> buildResponseEntity(HttpStatus status, String message) {
-        ErrorResponse errorResponse = new ErrorResponse(status.value(),message);
-        return new ResponseEntity<>(errorResponse, status);
+        }
+
+        ApiResponse apiResponse = new ApiResponse();
+
+        apiResponse.setCode(errorCode.getCode());
+        apiResponse.setMessage(errorCode.getMessage());
+
+        return ResponseEntity.badRequest().body(apiResponse);
     }
 
 

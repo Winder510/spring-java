@@ -8,6 +8,8 @@ import com.winder.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -29,10 +31,8 @@ public class UserServiceIpl implements UserService {
 
         UserEntity user = userMapper.toUser(req);
 
-//        UserEntity user = new UserEntity();
-//        user.setUserName(req.getUserName());
-//        user.setUserPassword(req.getUserPassword());
-//        user.setUserEmail(req.getUserEmail());
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
+        user.setUserPassword(passwordEncoder.encode(req.getUserPassword()));
 
         return userRepository.save(user);
     }
