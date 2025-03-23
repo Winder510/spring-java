@@ -18,6 +18,8 @@ spring:
 logging:
   level:
     org.springframework.security: DEBUG
+jwt:
+  secret: U3VwZXJTZWNyZXRLZXkxMjM0NTY3ODkwMTIzNDU2Nzg5
 
 server:
   port: 8000

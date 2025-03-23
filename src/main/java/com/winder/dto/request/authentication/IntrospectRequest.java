@@ -1,4 +1,4 @@
-package com.winder.dto.response;
+package com.winder.dto.request.authentication;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -8,8 +8,6 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class AuthenticationResponse {
+public class IntrospectRequest {
     String token;
-    boolean isAuthenticated;
-
 }
