@@ -100,7 +100,7 @@ public class AuthServiceImpl implements AuthService {
                 .expirationTime(new Date(
                         Instant.now().plus(1, ChronoUnit.HOURS).toEpochMilli()
                 ))
-                .claim("Custome","Custom")
+                .claim("Custom","Custom")
                 .build();
 
         Payload payload = new Payload(jwtClaimsSet.toJSONObject());
