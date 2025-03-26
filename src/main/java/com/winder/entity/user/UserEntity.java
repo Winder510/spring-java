@@ -8,6 +8,7 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import java.util.List;
+import java.util.Set;
 
 @Data
 @Entity
@@ -31,4 +32,6 @@ public class UserEntity {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL,orphanRemoval = true)
     private List<FeedEntity> feedList;
+
+
 }

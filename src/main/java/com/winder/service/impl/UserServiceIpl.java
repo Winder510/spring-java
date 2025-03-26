@@ -1,23 +1,29 @@
 package com.winder.service.impl;
 
+import com.winder.base.AppException;
 import com.winder.dto.request.user.UserCreationRequest;
 import com.winder.entity.user.UserEntity;
+import com.winder.enums.ErrorCode;
 import com.winder.mapper.UserMapper;
 import com.winder.repository.UserRepository;
 import com.winder.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserServiceIpl implements UserService {
 
+    private static final Logger log = LoggerFactory.getLogger(UserServiceIpl.class);
     @Autowired
     private UserRepository userRepository;
 
@@ -59,8 +65,12 @@ public class UserServiceIpl implements UserService {
     }
 
     @Override
+    @PostAuthorize("returnObject.userName == authentication.name")
     public UserEntity getUser(Long id) {
-       return userRepository.findById(id).orElseThrow(()-> new RuntimeException("User not found"));
+        var contextHolder = SecurityContextHolder.getContext();
+        log.info("Authentication details: {}", contextHolder.getAuthentication().getName());
+
+        return userRepository.findById(id).orElseThrow(()-> new AppException(ErrorCode.USER_NOT_EXISTED));
     }
 
 

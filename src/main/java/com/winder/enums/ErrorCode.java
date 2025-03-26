@@ -1,32 +1,35 @@
 package com.winder.enums;
 
 
+import lombok.Getter;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+
 public enum ErrorCode {
-    UNCATEGORIZED_EXCEPTION(9999, "Uncategorized error"),
-    INVALID_KEY(1001, "Uncategorized error"),
-    USER_EXISTED(1002, "User existed"),
-    USER_NOT_EXISTED(1005, "User not existed"),
+    UNCATEGORIZED_EXCEPTION(9999, "Uncategorized error",HttpStatus.INTERNAL_SERVER_ERROR),
+    INVALID_KEY(1001, "Uncategorized error",HttpStatus.BAD_REQUEST),
+    USER_EXISTED(1002, "User existed",HttpStatus.NOT_FOUND),
+    USER_NOT_EXISTED(1005, "User not existed",HttpStatus.BAD_REQUEST),
 
-    USERNAME_INVALID(1003, "Username must be at least 3 characters"),
-    INVALID_PASSWORD(1004, "Password must be at least 8 characters"),
-    INVALID_EMAIL(1006,"Email is not in the right format"),
-    UNAUTHENTICATED(1007, "Unauthenticated")
-
+    USERNAME_INVALID(1003, "Username must be at least 3 characters",HttpStatus.BAD_REQUEST),
+    INVALID_PASSWORD(1004, "Password must be at least 8 characters",HttpStatus.BAD_REQUEST),
+    INVALID_EMAIL(1006,"Email is not in the right format",HttpStatus.BAD_REQUEST),
+    UNAUTHENTICATED(1007, "Unauthenticated",HttpStatus.UNAUTHORIZED),
+    ACCESS_DENIED(1007, "Access denied ",HttpStatus.FORBIDDEN)
     ;
 
-    ErrorCode(int code, String message) {
+    ErrorCode(int code, String message,HttpStatusCode statusCode) {
         this.code = code;
         this.message = message;
+        this.statusCode= statusCode;
     }
 
+    @Getter
     private int code;
+    @Getter
     private String message;
 
-    public int getCode() {
-        return code;
-    }
+    @Getter
+    private HttpStatusCode statusCode;
 
-    public String getMessage() {
-        return message;
-    }
 }

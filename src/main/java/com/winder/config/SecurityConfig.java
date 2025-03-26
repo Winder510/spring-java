@@ -1,5 +1,6 @@
 package com.winder.config;
 
+import com.winder.base.CustomAuthenticationEntryPoint;
 import lombok.experimental.NonFinal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,6 +9,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -20,10 +22,11 @@ import javax.crypto.spec.SecretKeySpec;
 
 @Configuration
 @EnableWebSecurity()
+@EnableMethodSecurity()
 public class SecurityConfig {
 
     private static final Logger log = LoggerFactory.getLogger(SecurityConfig.class);
-    private final String[] PUBLIC_ENDPOINT = {"/v1/api/auth/sign-in", "/v1/api/auth/sign-up", "/v1/api/auth/introspect"};
+    private final String[] PUBLIC_ENDPOINT = {"/v1/api/auth/sign-in", "/v1/api/auth/sign-up", "/v1/api/auth/introspect","/v1/api/user/add"};
 
     @Value("${jwt.secret}")
     @NonFinal
@@ -39,7 +42,12 @@ public class SecurityConfig {
 
         // Cấu hình,đăng kí 1 authentication provider, để decode để authenticate
         http.oauth2ResourceServer(oauth2 ->
-                oauth2.jwt(jwtConfigurer -> jwtConfigurer.decoder(jwtDecoder())));
+                oauth2.jwt(jwtConfigurer ->
+                        jwtConfigurer.decoder(jwtDecoder()))
+                        .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
+
+        );
+
 
         http.csrf(AbstractHttpConfigurer::disable);
         return http.build();

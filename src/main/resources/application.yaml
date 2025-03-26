@@ -15,9 +15,7 @@ spring:
       hibernate:
         format_sql: true
         use_sql_comments: true
-logging:
-  level:
-    org.springframework.security: DEBUG
+
 jwt:
   secret: U3VwZXJTZWNyZXRLZXkxMjM0NTY3ODkwMTIzNDU2Nzg5
 
