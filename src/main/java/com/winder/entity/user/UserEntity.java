@@ -7,6 +7,7 @@ import lombok.Data;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
+import javax.management.relation.Role;
 import java.util.List;
 import java.util.Set;
 
@@ -33,5 +34,7 @@ public class UserEntity {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL,orphanRemoval = true)
     private List<FeedEntity> feedList;
 
+    @ManyToMany
+    Set<RoleEntity> roles;
 
 }
